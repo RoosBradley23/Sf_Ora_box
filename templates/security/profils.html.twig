@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ app_name }}{% endblock %}
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            {# total items count #}
+            <div class="count">
+                <button type="button" class="btn btn-outline-secondary">
+                    Total <span class="badge bg-success ms-1">{{ data.getTotalItemCount }}</span>
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addForm">
+                    <i class="icon" data-feather="plus-circle"></i>
+                    Ajouter
+                </button>
+                {# Total : {{ data.getTotalItemCount }} #}
+            </div>
+            <div id="addForm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Ajouter un Profil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ path('app_profils_add') }}" method="POST" autocomplete="off">
+                                <div class="mb-3">
+                                    <label class="form-label" for="libelle">Libellé</label>
+                                    <input type="text" class="form-control" id="libelle" name="libelle" required placeholder="Entrer le libellé du profil">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="description">Description</label>
+                                    <textarea type="text" class="form-control" id="description" name="description" required placeholder="Entrer la description du profil" rows="6"></textarea>
+                                </div>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-sm btn-dark" data-bs-dismiss="modal">
+                                        <i class="icon" data-feather="x-circle"></i>
+                                        ANNULER
+                                    </button>
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        <i class="icon" data-feather="check-circle"></i>
+                                        ENREGISTRER
+                                    </button>
+                                </div>
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width:5%; text-align:center">#</th>
+                            <th style="width:30%" {% if data.isSorted('libelle') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(data, 'Libelle', 'libelle') }}
+                            </th>
+                            <th {% if data.isSorted('description') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(data, 'Description', 'description') }}
+                            </th>
+                            <th style="width:5%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set i = 1 %}
+                        {% for d in data %}
+                            <tr>
+                                <td style="text-align:center">{{ i }}</td>
+                                <td>{{ d.libelle is defined ? d.libelle : '' }}</td>
+                                <td>{{ d.description is defined ? d.description : '' }}</td>
+                                <td style="text-align: center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="mdi mdi-chevron-down"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#enable">
+                                                <i class="icon" data-feather="check-circle"></i>
+                                                ACTIVER
+                                            </a>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#disable">
+                                                <i class="icon" data-feather="x-circle"></i>
+                                                DESACTIVER
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="enable" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Voulez-vous vraiment activer le profil ?
+                                            </p>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
+                                                    <i class="icon" data-feather="x-circle"></i>
+                                                    NON
+                                                </button>
+                                                <button type="button" class="btn btn-primary">
+                                                    <i class="icon" data-feather="check-circle"></i>
+                                                    OUI
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="disable" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Voulez-vous vraiment désactiver le profil ?
+                                            </p>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
+                                                    <i class="icon" data-feather="x-circle"></i>
+                                                    NON
+                                                </button>
+                                                <button type="button" class="btn btn-primary">
+                                                    <i class="icon" data-feather="check-circle"></i>
+                                                    OUI
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% set i = i + 1 %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {# display navigation #}
+                <div class="navigation mt-3">
+                    {{ knp_pagination_render(data) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript">
+
+    </script>
+{% endblock %}

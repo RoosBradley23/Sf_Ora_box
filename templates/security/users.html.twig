@@ -1,0 +1,227 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ app_name }}{% endblock %}
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            {# total items count #}
+            <div class="count">
+                <button type="button" class="btn btn-outline-secondary">
+                    Total <span class="badge bg-success ms-1">{{ data.getTotalItemCount }}</span>
+                </button>
+            
+                {# Total : {{ data.getTotalItemCount }} #}
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width:5%; text-align:center">#</th>
+                            <th style="width:10%" {% if data.isSorted('matricule') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(data, 'Matricule', 'matricule') }}
+                            </th>
+                            <th style="width:23%" {% if data.isSorted('nom') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(data, 'Nom', 'nom') }}
+                            </th>
+                            <th style="width:23%" {% if data.isSorted('prenom') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(data, 'Prénom', 'prenom') }}
+                            </th>
+                            <th {% if data.isSorted('email') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(data, 'Email', 'email') }}
+                            </th>
+                            <th style="width:15%" {% if data.isSorted('identifiant') %} class="sorted"{% endif %}>
+                                {{ knp_pagination_sortable(data, 'Identifiant', 'identifiant') }}
+                            </th>
+                            <th style="width:5%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set i = 1 %}
+                        {% for d in data %}
+                            <tr>
+                                <td style="text-align:center">{{ i }}</td>
+                                <td>{{ d.matricule is defined ? d.matricule : '' }}</td>
+                                <td>{{ d.nom is defined ? d.nom : '' }}</td>
+                                <td>{{ d.prenom is defined ? d.prenom : '' }}</td>
+                                <td>{{ d.email is defined ? d.email : '' }}</td>
+                                <td>{{ d.identifiant is defined ? d.identifiant : '' }}</td>
+                                <td style="text-align: center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="mdi mdi-chevron-down"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#enable">
+                                                <i class="icon" data-feather="check-circle"></i>
+                                                ACTIVER
+                                            </a>
+                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#disable">
+                                                <i class="icon" data-feather="x-circle"></i>
+                                                DESACTIVER
+                                            </a>
+                                             <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#attribuerAction">
+                                                <i class="icon" data-feather="x-circle" ></i>
+                                                ATTRIBUER DES ACTIONS
+                                            </a>
+                                             <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#disable">
+                                                <i class="icon" data-feather="x-circle"></i>
+                                                RETIRER UNE ACTION
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {# template #}
+                                    <div id="attribuerAction" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="myModalLabel">Attribuer des actions</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ path('app_assign_actions') }}" method="POST" autocomplete="off">
+                                                        <div class="mb-3">
+                                                            <input type="text" class="form-control" name="id" value="{{d.id}}" required disable>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="col-md-2 col-form-label">Sélection multiple</label>
+                                                            <div class="col-md-10">
+                                                                <select class="form-select">
+                                                                    {% for action in actions %}
+                                                                    <option value="{{ action.id }}">{{ action.libelle }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="text-center">
+                                                            <button type="button" class="btn btn-sm btn-dark" data-bs-dismiss="modal">
+                                                                <i class="icon" data-feather="x-circle"></i>
+                                                                ANNULER
+                                                            </button>
+                                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                                <i class="icon" data-feather="check-circle"></i>
+                                                                ENREGISTRER
+                                                            </button>
+                                                        </div>
+                                                    </form> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# end template #}
+
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="enable" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Voulez-vous vraiment activer le compte de cet utilisateur ?
+                                            </p>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
+                                                    <i class="icon" data-feather="x-circle"></i>
+                                                    NON
+                                                </button>
+                                                <button type="button" class="btn btn-primary">
+                                                    <i class="icon" data-feather="check-circle"></i>
+                                                    OUI
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="add_action" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Ajouter une action</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                    
+                                        <label class="form-label select-label">Selectionner des actions</label>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-primary">
+                                                    <i class="icon" data-feather="check-circle"></i>
+                                                    VALIDER
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="disable" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Voulez-vous vraiment désactiver le compte de cet utilisateur ?
+                                            </p>
+                                            <div class="text-center">
+                                                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
+                                                    <i class="icon" data-feather="x-circle"></i>
+                                                    NON
+                                                </button>
+                                                <button type="button" class="btn btn-primary">
+                                                    <i class="icon" data-feather="check-circle"></i>
+                                                    OUI
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% set i = i + 1 %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {# display navigation #}
+                <div class="navigation mt-3">
+                    {{ knp_pagination_render(data) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript">
+            const selectMultiple = document.getElementById('select-multiple');
+            const options = selectMultiple.getElementsByTagName('option');
+            
+            for (let option of options) {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = option.value;
+                checkbox.id = option.value;
+                
+                option.parentNode.insertBefore(checkbox, option);
+                
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        option.selected = true;
+                    } else {
+                        option.selected = false;
+                    }
+                });
+            }
+    </script>
+{% endblock %}

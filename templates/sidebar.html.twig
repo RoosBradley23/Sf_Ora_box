@@ -1,0 +1,60 @@
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <a href="{{ path('dashboard') }}" class="logo logo-dark">
+            <span class="logo-sm text-center">
+                <img src="{{ asset('images/p.png') }}" alt="" height="55">
+            </span>
+            <span class="logo-lg">
+                <img src="{{ asset('images/prodeta.png') }}" alt="" height="55">
+            </span>
+        </a>
+    </div>
+
+    <button type="button" class="btn btn-sm px-3 font-size-16 header-item vertical-menu-btn">
+        <i class="fa fa-fw fa-bars"></i>
+    </button>
+
+    <div data-simplebar class="sidebar-menu-scroll">
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title" data-key="t-dashboards"></li>
+                <li {% if menuParent is defined and menuParent == "dashboard" %}class="mm-active"{% endif %}>
+                    <a href="{{ path('dashboard') }}">
+                        <i class="icon nav-icon" data-feather="pie-chart"></i>
+                        <span class="menu-item" data-key="t-sales">Tableau de Bord</span>
+                    </a>
+                </li>
+                <li {% if menuParent is defined and menuParent == "users" %}class="mm-active"{% endif %}>
+                    <a href="{{ path('app_users') }}">
+                        <i class="icon nav-icon" data-feather="users"></i>
+                        <span class="menu-item" data-key="t-sales">Utilisateurs</span>
+                    </a>
+                </li>
+                <li {% if menuParent is defined and menuParent == "profils" %}class="mm-active"{% endif %}>
+                    <a href="{{ path('app_profils') }}">
+                        <i class="icon nav-icon" data-feather="award"></i>
+                        <span class="menu-item" data-key="t-sales">Profils</span>
+                    </a>
+                </li>
+                <li {% if menuParent is defined and menuParent == "actions" %}class="mm-active"{% endif %}>
+                    <a href="{{ path('app_actions') }}">
+                        <i class="icon nav-icon" data-feather="activity"></i>
+                        <span class="menu-item" data-key="t-sales">Actions</span>
+                    </a>
+                </li>
+                <li {% if menuParent is defined and menuParent == "permissions" %}class="mm-active"{% endif %}>
+                    <a href="{{ path('app_permissions') }}">
+                        <i class="icon nav-icon" data-feather="shield"></i>
+                        <span class="menu-item" data-key="t-sales">Permissions</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Left Sidebar End -->

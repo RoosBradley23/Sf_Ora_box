@@ -1,0 +1,12 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    globals:
+        app_name: "PRODETA"
+        app_long_name: "PRODUCTION DES ETATS"
+        app_version: 'v2'
+        app_logo: 'logos/logo_app.png'
+        login_logo: 'logos/logo_app.png'
+
+when@test:
+    twig:
+        strict_variables: true

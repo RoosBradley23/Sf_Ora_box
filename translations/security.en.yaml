@@ -1,0 +1,8 @@
+'Invalid credentials.' : "Identifiants Incorrects."
+'Account is disabled.' : "Votre compte est désactivé, veuillez contacter l'administrateur."
+'Credentials have expired.' : "Votre mot de passe est expiré, veuillez contacter l'administrateur."
+'Account has expired.' : "Votre compte est expiré, veuillez contacter l'administrateur."
+'Invalid CSRF token.' : 'Jeton CSRF non valide.'
+'Too many failed login attempts, please try again in %minutes% minutes.' : "Trop de tentatives de connexion infructueuses, veuillez réessayer dans 5 minutes."
+'code_invalid' : "Le code de confirmation est incorrect, veuillez vous reconnecter."
+'Your user account no longer exists.' : "Votre compte utilisateur n'existe plus."
